@@ -17,7 +17,13 @@ interface ListDataCardProps {
 const ListDataCard: React.FC<ListDataCardProps> = (
   props: ListDataCardProps,
 ) => {
-  const {imageUrl, title, subTitle = 'N/A', onPress, disabled = false} = props;
+  const {
+    imageUrl,
+    title = 'unknown',
+    subTitle = 'unknown',
+    onPress,
+    disabled = false,
+  } = props;
   return (
     <TouchableOpacity
       onPress={onPress}

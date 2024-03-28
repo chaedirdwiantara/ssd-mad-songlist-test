@@ -18,76 +18,35 @@ import {uselistDataHook} from '../hooks/use-dataList.hook';
 const HomeScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {isLoading, listData, isError, stopPagination, getlistData} =
-    uselistDataHook();
-  const [meta, setMeta] = useState<{page: number; limit: number}>({
-    page: 1,
-    limit: 15,
-  });
-  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const {isLoading, listData, isError, getlistData} = uselistDataHook();
   const [searchState, setSearchState] = useState<string>('');
-
-  useEffect(() => {
-    getlistData({page: meta.page, limit: meta.limit, refresh: false});
-  }, []);
-
-  useEffect(() => {
-    if (refreshing) {
-      getlistData({page: 1, limit: meta.limit, refresh: true});
-    }
-  }, [refreshing]);
-
-  useEffect(() => {
-    if (!isLoading) {
-      setRefreshing(false);
-    }
-  }, [isLoading]);
-
-  const nextPage = () => {
-    getlistData({page: meta.page + 1, limit: meta.limit, refresh: false});
-    setMeta({
-      ...meta,
-      page: meta.page + 1,
-    });
-  };
-
-  const handleEndScroll = () => {
-    if (!stopPagination) {
-      nextPage();
-    }
-  };
 
   const handleOnPress = (mal_id: number) => {
     navigation.navigate('DetailData', {id: mal_id});
   };
 
   const onSubmitSearch = () => {
-    console.log(searchState);
+    getlistData({term: searchState, limit: 30});
   };
 
   return (
     <View style={styles.container}>
       <TopNavigation.Type2
-        title="List Anime"
+        title="SSD Search Song"
         itemStrokeColor={color.Neutral[10]}
       />
-      {isLoading && listData.length == 0 && <LoadingIndicator size="large" />}
+      <SearchBar
+        value={searchState}
+        onChangeText={(newText: string) => setSearchState(newText)}
+        rightIcon={searchState !== '' && true}
+        reset={() => setSearchState('')}
+        onSubmitEditing={onSubmitSearch}
+        containerStyle={styles.searchStyle}
+      />
+      {isLoading && <LoadingIndicator size="large" />}
       <View style={styles.bodyContainer}>
-        {refreshing && (
-          <View style={styles.loadingContainer}>
-            <LoadingIndicator size="small" />
-          </View>
-        )}
-        {!isError ? (
+        {!isError && !isLoading ? (
           <>
-            <Gap height={20} />
-            <SearchBar
-              value={searchState}
-              onChangeText={(newText: string) => setSearchState(newText)}
-              rightIcon={searchState !== '' && true}
-              reset={() => setSearchState('')}
-              onSubmitEditing={onSubmitSearch}
-            />
             <FlatList
               data={listData}
               showsVerticalScrollIndicator={false}
@@ -95,24 +54,21 @@ const HomeScreen = () => {
               keyExtractor={(_, index) => index.toString()}
               renderItem={({item, index}) => (
                 <ListDataCard
-                  title={item.title}
-                  subTitle={item.duration}
-                  imageUrl={item.images.jpg.image_url}
-                  onPress={() => handleOnPress(item.mal_id)}
+                  title={item.trackName}
+                  subTitle={item.artistName}
+                  imageUrl={item.artworkUrl100}
+                  onPress={() => handleOnPress(2)}
                 />
               )}
-              onEndReached={handleEndScroll}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={() => setRefreshing(true)}
+              ListEmptyComponent={
+                <EmptyState
+                  text="Error"
+                  subtitle="Oops there is something error"
                 />
               }
             />
           </>
-        ) : (
-          <EmptyState text="Error" subtitle="Oops there is something error" />
-        )}
+        ) : null}
       </View>
     </View>
   );
@@ -132,17 +88,11 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: widthResponsive(20),
   },
-  titleStyle: {
-    color: color.Neutral[10],
-  },
   listContainer: {
     marginTop: widthResponsive(20),
   },
-  textStyle: {
-    color: color.Neutral[10],
-  },
-  loadingContainer: {
-    alignItems: 'center',
-    paddingVertical: widthResponsive(20),
+  searchStyle: {
+    paddingHorizontal: widthResponsive(20),
+    marginTop: widthResponsive(10),
   },
 });

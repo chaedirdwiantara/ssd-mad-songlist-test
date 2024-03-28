@@ -1,4 +1,4 @@
-import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
+import axios, {AxiosError, AxiosInstance} from 'axios';
 
 type SsuAPIParams = {
   cookie?: string;
@@ -8,7 +8,7 @@ let API: AxiosInstance;
 
 const setupAPIClient = () => {
   API = axios.create({
-    baseURL: `https://api.jikan.moe/v4`,
+    baseURL: `https://itunes.apple.com`,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
