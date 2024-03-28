@@ -62,7 +62,7 @@ const SearchScreen = () => {
               )}
               ListEmptyComponent={
                 <EmptyState
-                  text="No Data Available"
+                  text="No Song Matches"
                   subtitle="Try to find a new artist/song..."
                 />
               }

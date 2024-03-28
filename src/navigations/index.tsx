@@ -14,19 +14,17 @@ import {normalize} from '../utils/formatter';
 import {FeedScreen, HomeScreen} from '../screen';
 
 // Screen
-import {LoginScreen} from '../screen/Login';
 import {SplashScreen} from '../screen/SplashScreen';
 import DetailData from '../screen/DetailData';
 
 // Icon
-import {FeedIcon, HomeIcon, ProfileIcon, SearchIcon} from '../assets/icon';
+import {SearchIcon, StarIcon} from '../assets/icon';
 import {dataList} from '../interface/dataList.interface';
 
 // interface
 
 export type RootStackParams = {
   SplashScreen: undefined;
-  LoginScreen: undefined;
   MainTab: undefined;
   DetailData: {data: dataList};
 };
@@ -79,7 +77,7 @@ const TabScreen = () => {
         options={{
           tabBarIcon: ({color}) => (
             <View style={styles.root}>
-              <FeedIcon stroke={color} />
+              <StarIcon stroke={color} />
               <Text style={[styles.label, {color}]}>{'Favorites'}</Text>
             </View>
           ),
@@ -95,7 +93,6 @@ export const RootStackScreen = () => (
     screenOptions={screenOption}
     initialRouteName={'SplashScreen'}>
     <RootStack.Screen name="MainTab" component={TabScreen} />
-    <RootStack.Screen name="LoginScreen" component={LoginScreen} />
     <RootStack.Screen name="SplashScreen" component={SplashScreen} />
     <RootStack.Screen name="DetailData" component={DetailData} />
   </RootStack.Navigator>

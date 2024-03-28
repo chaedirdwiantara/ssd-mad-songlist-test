@@ -17,7 +17,7 @@ export const SplashScreen: React.FC<SplashScrennProps> = ({
 }: SplashScrennProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('LoginScreen');
+      navigation.replace('MainTab');
     }, 1000);
 
     return () => clearTimeout(timer);

@@ -1,5 +1,5 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
 import {color} from '../theme';
 import {widthResponsive} from '../utils';
 import {EmptyState, TopNavigation} from '../components';
@@ -29,7 +29,7 @@ const FeedScreen = () => {
   return (
     <View style={styles.container}>
       <TopNavigation.Type2
-        title="Favorites"
+        title="Favorite Songs"
         itemStrokeColor={color.Neutral[10]}
       />
       <View style={styles.bodyContainer}>
@@ -37,8 +37,6 @@ const FeedScreen = () => {
           <FlatList
             data={data}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.listContainer}
-            numColumns={2}
             keyExtractor={(_, index) => index.toString()}
             renderItem={({item}) => (
               <ListDataCard
@@ -50,7 +48,7 @@ const FeedScreen = () => {
             )}
             ListEmptyComponent={
               <EmptyState
-                text="No Favorites data"
+                text="No Favorites Songs"
                 subtitle="Try to add favorites from detail"
               />
             }
@@ -72,9 +70,7 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     flex: 1,
+    width: '100%',
     padding: widthResponsive(20),
-  },
-  listContainer: {
-    marginTop: widthResponsive(20),
   },
 });

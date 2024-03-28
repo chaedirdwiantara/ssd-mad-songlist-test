@@ -5,8 +5,8 @@ import {widthResponsive} from '../../utils';
 import {SvgProps} from '../../interface/svg.interface';
 
 function StarIcon({
-  width = widthResponsive(18),
-  height = widthResponsive(18),
+  width = widthResponsive(21),
+  height = widthResponsive(21),
   fill = 'none',
   stroke = '#FABE2C',
   style,
