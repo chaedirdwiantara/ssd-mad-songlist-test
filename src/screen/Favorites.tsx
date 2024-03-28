@@ -10,7 +10,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
 import {dataList} from '../interface/dataList.interface';
 
-const FeedScreen = () => {
+const FavoriteScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -59,7 +59,7 @@ const FeedScreen = () => {
   );
 };
 
-export default FeedScreen;
+export default FavoriteScreen;
 
 const styles = StyleSheet.create({
   container: {

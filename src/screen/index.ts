@@ -1,6 +1,6 @@
-import FeedScreen from "./Feed";
-import HomeScreen from "./Home";
+import FavoriteScreen from "./Favorites";
+import SearchScreen from "./SearchScreen";
 
 export {
-    HomeScreen,FeedScreen
+    SearchScreen,FavoriteScreen
 }

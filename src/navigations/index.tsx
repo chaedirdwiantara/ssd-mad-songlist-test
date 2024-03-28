@@ -11,7 +11,7 @@ import {color, font} from '../theme';
 import {normalize} from '../utils/formatter';
 
 // Main
-import {FeedScreen, HomeScreen} from '../screen';
+import {FavoriteScreen, SearchScreen} from '../screen';
 
 // Screen
 import {SplashScreen} from '../screen/SplashScreen';
@@ -30,8 +30,8 @@ export type RootStackParams = {
 };
 
 export type MainTabParams = {
-  Feed: undefined;
-  Home: undefined;
+  Favorite: undefined;
+  Search: undefined;
   AddEmployee: undefined;
 };
 
@@ -58,13 +58,13 @@ const TabScreen = () => {
         },
       }}>
       <MainTab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Search"
+        component={SearchScreen}
         options={{
           tabBarIcon: ({color}) => (
             <TouchableOpacity
               style={styles.root}
-              onPress={() => navigation.navigate('Home')}>
+              onPress={() => navigation.navigate('Search')}>
               <SearchIcon stroke={color} />
               <Text style={[styles.label, {color}]}>{'Search'}</Text>
             </TouchableOpacity>
@@ -72,8 +72,8 @@ const TabScreen = () => {
         }}
       />
       <MainTab.Screen
-        name="Feed"
-        component={FeedScreen}
+        name="Favorite"
+        component={FavoriteScreen}
         options={{
           tabBarIcon: ({color}) => (
             <View style={styles.root}>
