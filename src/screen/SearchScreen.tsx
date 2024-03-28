@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {color} from '../theme';
 import {widthResponsive} from '../utils';
 import {
@@ -8,18 +8,27 @@ import {
   SearchBar,
   TopNavigation,
 } from '../components';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
 import ListDataCard from '../components/molecule/ListData';
 import {uselistDataHook} from '../hooks/use-dataList.hook';
 import {dataList} from '../interface/dataList.interface';
+import {getList} from '../hooks/use-storage.hook';
+import {StarIcon} from '../assets/icon';
 
 const SearchScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {isLoading, listData, isError, getlistData} = uselistDataHook();
   const [searchState, setSearchState] = useState<string>('');
+  const [favorite, setFavorite] = useState<dataList[]>();
+
+  useFocusEffect(
+    useCallback(() => {
+      setFavorite(getList());
+    }, []),
+  );
 
   const handleOnPress = (data: dataList) => {
     navigation.navigate('DetailData', {data});
@@ -27,6 +36,12 @@ const SearchScreen = () => {
 
   const onSubmitSearch = () => {
     getlistData({term: searchState, limit: 30});
+  };
+
+  const isFavorited = (trackId: number) => {
+    return favorite?.some(
+      (localState: dataList) => localState.trackId === trackId,
+    );
   };
 
   return (
@@ -52,12 +67,16 @@ const SearchScreen = () => {
               showsVerticalScrollIndicator={false}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({item}) => (
-                <ListDataCard
-                  title={item.trackName}
-                  subTitle={item.artistName}
-                  imageUrl={item.artworkUrl60}
-                  onPress={() => handleOnPress(item)}
-                />
+                <View style={styles.childrenContainer}>
+                  <ListDataCard
+                    title={item.trackName}
+                    subTitle={item.artistName}
+                    imageUrl={item.artworkUrl60}
+                    onPress={() => handleOnPress(item)}
+                    withIcon={isFavorited(item.trackId)}
+                  />
+                  {isFavorited(item.trackId) ? <StarIcon /> : <View />}
+                </View>
               )}
               ListEmptyComponent={
                 <EmptyState
@@ -90,5 +109,11 @@ const styles = StyleSheet.create({
   searchStyle: {
     paddingHorizontal: widthResponsive(20),
     marginVertical: widthResponsive(10),
+  },
+  childrenContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'space-between',
   },
 });

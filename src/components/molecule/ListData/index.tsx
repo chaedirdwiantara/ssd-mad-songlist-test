@@ -12,6 +12,7 @@ interface ListDataCardProps {
   subTitle: string;
   onPress: () => void;
   disabled?: boolean;
+  withIcon?: boolean;
 }
 
 const ListDataCard: React.FC<ListDataCardProps> = (
@@ -23,11 +24,12 @@ const ListDataCard: React.FC<ListDataCardProps> = (
     subTitle = 'unknown',
     onPress,
     disabled = false,
+    withIcon = false,
   } = props;
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={styles.container}
+      style={styles(withIcon).container}
       disabled={disabled}>
       <FastImage
         style={{width: 50, height: 50, borderRadius: 10}}
@@ -40,11 +42,11 @@ const ListDataCard: React.FC<ListDataCardProps> = (
       />
       <Gap width={20} />
       <View>
-        <Text style={styles.titleStyle} numberOfLines={1}>
+        <Text style={styles(withIcon).titleStyle} numberOfLines={1}>
           {title}
         </Text>
         <Gap height={3} />
-        <Text style={styles.subTitleStyle} numberOfLines={1}>
+        <Text style={styles(withIcon).subTitleStyle} numberOfLines={1}>
           {subTitle}
         </Text>
       </View>
@@ -54,20 +56,23 @@ const ListDataCard: React.FC<ListDataCardProps> = (
 
 export default ListDataCard;
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    borderRadius: 10,
-    marginBottom: widthResponsive(10),
-    width: '100%',
-  },
-  titleStyle: {
-    color: color.Neutral[10],
-    fontWeight: 'bold',
-    fontSize: mvs(13),
-  },
-  subTitleStyle: {
-    color: color.Neutral[50],
-    fontSize: mvs(12),
-  },
-});
+const styles = (withIcon?: boolean) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      borderRadius: 10,
+      marginBottom: widthResponsive(10),
+      width: withIcon ? undefined : '100%',
+      maxWidth: withIcon ? '90%' : undefined,
+    },
+    titleStyle: {
+      color: color.Neutral[10],
+      fontWeight: 'bold',
+      fontSize: mvs(13),
+      maxWidth: withIcon ? '90%' : undefined,
+    },
+    subTitleStyle: {
+      color: color.Neutral[50],
+      fontSize: mvs(12),
+    },
+  });
