@@ -11,7 +11,7 @@ import {color, font} from '../theme';
 import {normalize} from '../utils/formatter';
 
 // Main
-import {FeedScreen, HomeScreen, AddEmployee} from '../screen';
+import {FeedScreen, HomeScreen} from '../screen';
 
 // Screen
 import {LoginScreen} from '../screen/Login';
@@ -20,6 +20,7 @@ import DetailData from '../screen/DetailData';
 
 // Icon
 import {FeedIcon, HomeIcon, ProfileIcon, SearchIcon} from '../assets/icon';
+import {dataList} from '../interface/dataList.interface';
 
 // interface
 
@@ -27,7 +28,7 @@ export type RootStackParams = {
   SplashScreen: undefined;
   LoginScreen: undefined;
   MainTab: undefined;
-  DetailData: {id: number};
+  DetailData: {data: dataList};
 };
 
 export type MainTabParams = {
@@ -66,8 +67,8 @@ const TabScreen = () => {
             <TouchableOpacity
               style={styles.root}
               onPress={() => navigation.navigate('Home')}>
-              <HomeIcon stroke={color} />
-              <Text style={[styles.label, {color}]}>{'Home'}</Text>
+              <SearchIcon stroke={color} />
+              <Text style={[styles.label, {color}]}>{'Search'}</Text>
             </TouchableOpacity>
           ),
         }}

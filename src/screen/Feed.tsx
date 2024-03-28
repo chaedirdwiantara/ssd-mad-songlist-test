@@ -8,18 +8,13 @@ import ListDataCard from '../components/molecule/ListData';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
-
-type stateProps = {
-  id: number;
-  imageUrl: string;
-  name: string;
-};
+import {dataList} from '../interface/dataList.interface';
 
 const FeedScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const [data, setData] = useState<stateProps[]>();
+  const [data, setData] = useState<dataList[]>();
 
   useFocusEffect(
     useCallback(() => {
@@ -27,8 +22,8 @@ const FeedScreen = () => {
     }, []),
   );
 
-  const handleOnPress = (mal_id: number) => {
-    navigation.navigate('DetailData', {id: mal_id});
+  const handleOnPress = (artistData: dataList) => {
+    navigation.navigate('DetailData', {data: artistData});
   };
 
   return (
@@ -47,9 +42,10 @@ const FeedScreen = () => {
             keyExtractor={(_, index) => index.toString()}
             renderItem={({item}) => (
               <ListDataCard
-                name={item.name}
-                imageUrl={item.imageUrl}
-                onPress={() => handleOnPress(item.id)}
+                title={item.trackName}
+                subTitle={item.artistName}
+                imageUrl={item.artworkUrl60}
+                onPress={() => handleOnPress(item)}
               />
             )}
             ListEmptyComponent={

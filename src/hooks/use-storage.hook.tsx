@@ -1,15 +1,10 @@
 import {MMKV} from 'react-native-mmkv';
-
-type props = {
-  id: number;
-  imageUrl: string;
-  name: string;
-};
+import {dataList} from '../interface/dataList.interface';
 
 const storage = new MMKV();
 
 // ? Add Item into storage
-export const addItemToList = (item: props) => {
+export const addItemToList = (item: dataList) => {
   const currentListString = storage.getString('favoriteAnime');
   const currentList = currentListString ? JSON.parse(currentListString) : [];
   const updatedList = [...currentList, item];
@@ -26,7 +21,9 @@ export const getList = () => {
 export const removeItemFromList = (itemId: number) => {
   const currentListString = storage.getString('favoriteAnime');
   const currentList = currentListString ? JSON.parse(currentListString) : [];
-  const updatedList = currentList.filter((item: props) => item.id !== itemId);
+  const updatedList = currentList.filter(
+    (item: dataList) => item.trackId !== itemId,
+  );
   storage.set('favoriteAnime', JSON.stringify(updatedList));
 };
 
@@ -36,5 +33,5 @@ export function isItemInList(itemId: number) {
   if (!currentListString) return false;
 
   const currentList = JSON.parse(currentListString);
-  return currentList.some((item: props) => item.id === itemId);
+  return currentList.some((item: dataList) => item.trackId === itemId);
 }

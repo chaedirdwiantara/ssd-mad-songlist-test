@@ -3,7 +3,7 @@ import {dataList} from '../interface/dataList.interface';
 import {getListDataEP} from '../api/listData';
 
 export const uselistDataHook = () => {
-  const [listData, setlistData] = useState<dataList[]>([]);
+  const [listData, setlistData] = useState<dataList[]>();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 

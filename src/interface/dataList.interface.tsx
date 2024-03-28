@@ -30,6 +30,8 @@ export interface dataList {
   currency: string;
   primaryGenreName: string;
   isStreamable: boolean;
+  longDescription: string;
+  description: string;
 }
 
 export interface responseEp {

@@ -18,4 +18,11 @@ const elipsisText = (text: string, lengthText: number): string =>
   text?.length > lengthText ? text.substring(0, lengthText - 3) + '...' : text;
 
 
-export {normalize, elipsisText};
+const dateFormatter = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+    return new Intl.DateTimeFormat('en-GB', options).format(date);
+  };
+
+
+export {normalize, elipsisText,dateFormatter};

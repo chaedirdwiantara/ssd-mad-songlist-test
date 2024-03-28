@@ -1,14 +1,7 @@
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {color} from '../../theme';
-import {widthResponsive} from '../../utils';
+import {dateFormatter, widthResponsive} from '../../utils';
 import {useNavigation} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
@@ -16,19 +9,10 @@ import {
 } from '@react-navigation/native-stack';
 import {RootStackParams} from '../../navigations';
 import {mvs} from 'react-native-size-matters';
-import {
-  Button,
-  EmptyState,
-  Gap,
-  LoadingIndicator,
-  TopNavigation,
-} from '../../components';
-import {useDetailDataHook} from '../../hooks/use-dataDetail.hook';
+import {Button, Gap, TopNavigation} from '../../components';
 import FastImage from 'react-native-fast-image';
-import {StarIcon} from '../../assets/icon';
 import {
   addItemToList,
-  getList,
   isItemInList,
   removeItemFromList,
 } from '../../hooks/use-storage.hook';
@@ -38,18 +22,14 @@ type PostDetailProps = NativeStackScreenProps<RootStackParams, 'DetailData'>;
 const DetailData = ({route}: PostDetailProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {isLoading, isError, detailData, getDetailData, setdetailData} =
-    useDetailDataHook();
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
-  useEffect(() => {
-    getDetailData({id: route.params.id});
-  }, []);
+  const data = route.params.data;
 
   useEffect(() => {
     const checkItemStored = () => {
-      const itemExists = isItemInList(route.params.id);
+      const itemExists = isItemInList(data.trackId);
       setFavorite(itemExists);
     };
 
@@ -58,22 +38,15 @@ const DetailData = ({route}: PostDetailProps) => {
 
   const leftIconOnPress = () => {
     navigation.goBack();
-    setdetailData(undefined);
   };
 
   const buttonOnPress = () => {
-    if (detailData) {
-      if (favorite) {
-        setFavorite(false);
-        removeItemFromList(route.params.id);
-      } else {
-        setFavorite(true);
-        addItemToList({
-          id: detailData.mal_id,
-          name: detailData.title,
-          imageUrl: detailData?.images.jpg.image_url,
-        });
-      }
+    if (favorite) {
+      setFavorite(false);
+      removeItemFromList(data.trackId);
+    } else {
+      setFavorite(true);
+      addItemToList(data);
     }
   };
 
@@ -84,47 +57,40 @@ const DetailData = ({route}: PostDetailProps) => {
         leftIconAction={leftIconOnPress}
         itemStrokeColor={color.Neutral[10]}
       />
-      {detailData && !isError ? (
-        <ScrollView style={styles.bodyContainer}>
+
+      <ScrollView style={styles.bodyContainer}>
+        <View style={styles.imageContainer}>
           <FastImage
-            style={{width: '100%', height: 250, borderRadius: 10}}
+            style={styles.imageStyle}
             source={{
-              uri: detailData.images.jpg.large_image_url,
+              uri: data.artworkUrl100,
               headers: {Authorization: 'someAuthToken'},
-              priority: FastImage.priority.normal,
+              priority: FastImage.priority.high,
             }}
             resizeMode={FastImage.resizeMode.cover}
           />
-          <Gap height={10} />
-          <Text style={styles.titleStyle}>
-            {detailData.title}, {detailData.year}
-          </Text>
-
-          <Gap height={5} />
-          <View style={styles.score}>
-            <StarIcon width={14} height={14} />
-            <Gap width={4} />
-            <Text style={styles.textStyle}>{detailData.score}</Text>
-            <Gap width={4} />
-          </View>
-          <Text style={styles.textStyle}>{detailData.rating}</Text>
-          <Gap height={10} />
-          <View>
-            <Button
-              label={favorite ? 'Favorite' : 'Add To Favorite'}
-              containerStyles={styles.buttonStyle}
-              onPress={buttonOnPress}
-              bgColor={favorite ? color.Primary[400] : color.Secondary[200]}
-            />
-          </View>
-
-          <Gap height={10} />
-          <Text style={styles.textStyle}>{detailData.background}</Text>
-        </ScrollView>
-      ) : (
-        <EmptyState text="Error" subtitle="Oops there is something error" />
-      )}
-      {isLoading && <LoadingIndicator />}
+        </View>
+        <Gap height={10} />
+        <Text style={styles.titleStyle}>{data.trackName}</Text>
+        <Text style={styles.subTitleStyle}>{data.artistName}</Text>
+        <Text style={[styles.subTitleStyle, {fontSize: mvs(11)}]}>
+          {dateFormatter(data.releaseDate)}
+        </Text>
+        <Gap height={10} />
+        <Button
+          label={favorite ? 'Favorite' : 'Add To Favorite'}
+          containerStyles={styles.buttonStyle}
+          onPress={buttonOnPress}
+          bgColor={favorite ? color.Primary[400] : color.Secondary[200]}
+        />
+        <Gap height={10} />
+        <Text style={styles.descStyle}>
+          Desc:{' '}
+          {data.longDescription
+            ? data.longDescription
+            : data.description ?? '-'}
+        </Text>
+      </ScrollView>
     </View>
   );
 };
@@ -137,11 +103,15 @@ const styles = StyleSheet.create({
     backgroundColor: color.Dark[800],
   },
   titleStyle: {
-    fontSize: mvs(15),
-    fontWeight: 'bold',
     color: color.Neutral[10],
+    fontWeight: 'bold',
+    fontSize: mvs(18),
   },
-  textStyle: {
+  subTitleStyle: {
+    color: color.Neutral[50],
+    fontSize: mvs(16),
+  },
+  descStyle: {
     fontSize: mvs(13),
     color: color.Neutral[10],
   },
@@ -156,5 +126,14 @@ const styles = StyleSheet.create({
     height: undefined,
     aspectRatio: undefined,
     padding: widthResponsive(8),
+  },
+  imageContainer: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  imageStyle: {
+    width: widthResponsive(100),
+    height: widthResponsive(100),
+    borderRadius: 10,
   },
 });

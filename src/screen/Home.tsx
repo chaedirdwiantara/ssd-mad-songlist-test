@@ -14,15 +14,16 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
 import ListDataCard from '../components/molecule/ListData';
 import {uselistDataHook} from '../hooks/use-dataList.hook';
+import {dataList} from '../interface/dataList.interface';
 
-const HomeScreen = () => {
+const SearchScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const {isLoading, listData, isError, getlistData} = uselistDataHook();
   const [searchState, setSearchState] = useState<string>('');
 
-  const handleOnPress = (mal_id: number) => {
-    navigation.navigate('DetailData', {id: mal_id});
+  const handleOnPress = (data: dataList) => {
+    navigation.navigate('DetailData', {data});
   };
 
   const onSubmitSearch = () => {
@@ -45,25 +46,24 @@ const HomeScreen = () => {
       />
       {isLoading && <LoadingIndicator size="large" />}
       <View style={styles.bodyContainer}>
-        {!isError && !isLoading ? (
+        {!isError && !isLoading && listData ? (
           <>
             <FlatList
               data={listData}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.listContainer}
               keyExtractor={(_, index) => index.toString()}
-              renderItem={({item, index}) => (
+              renderItem={({item}) => (
                 <ListDataCard
                   title={item.trackName}
                   subTitle={item.artistName}
-                  imageUrl={item.artworkUrl100}
-                  onPress={() => handleOnPress(2)}
+                  imageUrl={item.artworkUrl60}
+                  onPress={() => handleOnPress(item)}
                 />
               )}
               ListEmptyComponent={
                 <EmptyState
-                  text="Error"
-                  subtitle="Oops there is something error"
+                  text="No Data Available"
+                  subtitle="Try to find a new artist/song..."
                 />
               }
             />
@@ -74,7 +74,7 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default SearchScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -88,11 +88,8 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: widthResponsive(20),
   },
-  listContainer: {
-    marginTop: widthResponsive(20),
-  },
   searchStyle: {
     paddingHorizontal: widthResponsive(20),
-    marginTop: widthResponsive(10),
+    marginVertical: widthResponsive(10),
   },
 });

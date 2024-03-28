@@ -34,7 +34,7 @@ const ListDataCard: React.FC<ListDataCardProps> = (
         source={{
           uri: imageUrl,
           headers: {Authorization: 'someAuthToken'},
-          priority: FastImage.priority.normal,
+          priority: FastImage.priority.high,
         }}
         resizeMode={FastImage.resizeMode.cover}
       />
