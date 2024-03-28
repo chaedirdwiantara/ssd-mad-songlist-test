@@ -92,11 +92,11 @@ const HomeScreen = () => {
               data={listData}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.listContainer}
-              numColumns={2}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({item, index}) => (
                 <ListDataCard
-                  name={item.title}
+                  title={item.title}
+                  subTitle={item.duration}
                   imageUrl={item.images.jpg.image_url}
                   onPress={() => handleOnPress(item.mal_id)}
                 />
@@ -129,6 +129,8 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     flex: 1,
+    width: '100%',
+    paddingHorizontal: widthResponsive(20),
   },
   titleStyle: {
     color: color.Neutral[10],

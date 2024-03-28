@@ -1,13 +1,15 @@
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {dataList} from '../../../interface/dataList.interface';
 import {color} from '../../../theme';
 import {widthResponsive} from '../../../utils';
 import FastImage from 'react-native-fast-image';
+import {Gap} from '../..';
+import {mvs} from 'react-native-size-matters';
 
 interface ListDataCardProps {
   imageUrl: string;
-  name: string;
+  title: string;
+  subTitle: string;
   onPress: () => void;
   disabled?: boolean;
 }
@@ -15,14 +17,14 @@ interface ListDataCardProps {
 const ListDataCard: React.FC<ListDataCardProps> = (
   props: ListDataCardProps,
 ) => {
-  const {imageUrl, name, onPress, disabled = false} = props;
+  const {imageUrl, title, subTitle = 'N/A', onPress, disabled = false} = props;
   return (
     <TouchableOpacity
       onPress={onPress}
       style={styles.container}
       disabled={disabled}>
       <FastImage
-        style={{width: '100%', height: 200, borderRadius: 10}}
+        style={{width: 50, height: 50, borderRadius: 10}}
         source={{
           uri: imageUrl,
           headers: {Authorization: 'someAuthToken'},
@@ -30,9 +32,16 @@ const ListDataCard: React.FC<ListDataCardProps> = (
         }}
         resizeMode={FastImage.resizeMode.cover}
       />
-      <Text style={styles.textStyle} numberOfLines={1}>
-        {name}
-      </Text>
+      <Gap width={20} />
+      <View>
+        <Text style={styles.titleStyle} numberOfLines={1}>
+          {title}
+        </Text>
+        <Gap height={3} />
+        <Text style={styles.subTitleStyle} numberOfLines={1}>
+          {subTitle}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -41,15 +50,18 @@ export default ListDataCard;
 
 const styles = StyleSheet.create({
   container: {
-    padding: widthResponsive(10),
-    borderWidth: 1,
-    borderColor: color.Pink[200],
+    flexDirection: 'row',
     borderRadius: 10,
     marginBottom: widthResponsive(10),
-    marginHorizontal: widthResponsive(10),
-    width: widthResponsive(140),
+    width: '100%',
   },
-  textStyle: {
+  titleStyle: {
     color: color.Neutral[10],
+    fontWeight: 'bold',
+    fontSize: mvs(13),
+  },
+  subTitleStyle: {
+    color: color.Neutral[50],
+    fontSize: mvs(12),
   },
 });
