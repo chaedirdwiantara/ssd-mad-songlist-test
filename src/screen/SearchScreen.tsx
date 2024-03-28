@@ -1,10 +1,9 @@
-import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
 import {color} from '../theme';
 import {widthResponsive} from '../utils';
 import {
   EmptyState,
-  Gap,
   LoadingIndicator,
   SearchBar,
   TopNavigation,
