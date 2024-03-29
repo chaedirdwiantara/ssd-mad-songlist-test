@@ -4,6 +4,7 @@
 
 # Xcode
 #
+!android/app/build/outputs/apk/release/app-release.apk
 build/
 *.pbxuser
 !default.pbxuser
