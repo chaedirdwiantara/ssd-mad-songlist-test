@@ -14,8 +14,8 @@ const topNavstyles = StyleSheet.create({
     borderBottomColor: color.Dark[500],
     paddingTop:
       Platform.OS === 'ios'
-        ? widthResponsive(barHeight)
-        : widthResponsive(barHeight + 15),
+        ? widthResponsive(barHeight + 10)
+        : widthResponsive(barHeight),
     paddingBottom: widthResponsive(20),
   },
   leftContainer: {

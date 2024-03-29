@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {ms, mvs} from 'react-native-size-matters';
 import AnimatedLottieView from 'lottie-react-native';

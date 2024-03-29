@@ -1,7 +1,5 @@
 import {
   NativeModules,
-  Platform,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -12,7 +10,6 @@ import {ArrowLeftIcon} from '../../../assets/icon';
 import {elipsisText, widthResponsive} from '../../../utils';
 import topNavstyles from './topNavstyles';
 import {color, font} from '../../../theme';
-import {mvs} from 'react-native-size-matters';
 
 /** === INTERFACE === */
 type Props = {
@@ -65,24 +62,25 @@ const Type1: React.FC<Props> = (props: Props) => {
     return (
       <View
         style={[
-          styles.headerContainer,
+          topNavstyles.headerContainer,
           {
             backgroundColor: bgColor,
           },
           containerStyles,
         ]}>
-        <View style={styles.leftContainer}>{iconLeft()}</View>
-        <View style={[styles.centerContainer, {flex: 5}, containerTextStyle]}>
+        <View style={topNavstyles.leftContainer}>{iconLeft()}</View>
+        <View
+          style={[topNavstyles.centerContainer, {flex: 5}, containerTextStyle]}>
           <Text
             numberOfLines={1}
             style={[
-              styles.centerTitle,
+              topNavstyles.centerTitle,
               {color: itemStrokeColor, fontFamily: font.InterSemiBold},
             ]}>
             {elipsisText(title, maxLengthTitle ?? 20)}
           </Text>
         </View>
-        <View style={styles.rightContainer}></View>
+        <View style={topNavstyles.rightContainer}></View>
       </View>
     );
   };
@@ -91,48 +89,3 @@ const Type1: React.FC<Props> = (props: Props) => {
 };
 
 export default Type1;
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomWidth: mvs(1),
-    borderBottomColor: color.Dark[500],
-    paddingTop:
-      Platform.OS === 'ios'
-        ? widthResponsive(barHeight)
-        : widthResponsive(barHeight + 15),
-    paddingBottom: widthResponsive(20),
-  },
-  leftContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
-  centerContainer: {
-    flex: 7,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  rightContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  centerTitle: {
-    fontSize: mvs(16),
-    fontFamily: font.InterSemiBold,
-    // letterSpacing: 0.15,
-    // textAlign: 'center',
-  },
-  iconLeftContainer: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-  },
-  iconRightContainer: {
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
-});
