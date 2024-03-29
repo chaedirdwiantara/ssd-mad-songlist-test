@@ -1,32 +1,16 @@
-import {useState} from 'react';
-import {dataList} from '../interface/dataList.interface';
-import {getListDataEP} from '../api/listData';
+import {responseEp} from '../interface/dataList.interface';
+import {getListDataEP} from '../api/listData.api';
+import {useQuery} from 'react-query';
+import {UseDataListQueryParams} from '../interface/base.interface';
 
-export const uselistDataHook = () => {
-  const [listData, setlistData] = useState<dataList[]>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+export const useDataListQuery = (props: UseDataListQueryParams) => {
+  const {data, isLoading, isError, refetch} = useQuery<responseEp, Error>(
+    ['dataList', props.term, props.limit],
+    () => getListDataEP(props),
+    {
+      enabled: false,
+    },
+  );
 
-  const getlistData = async (props: {term: string; limit?: number}) => {
-    setIsLoading(true);
-    try {
-      const response = await getListDataEP({
-        term: props.term,
-        limit: props.limit,
-      });
-      setlistData(response.results);
-    } catch (err) {
-      console.log(err);
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return {
-    isLoading,
-    listData,
-    isError,
-    getlistData,
-  };
+  return {data, isLoading, isError, refetch};
 };

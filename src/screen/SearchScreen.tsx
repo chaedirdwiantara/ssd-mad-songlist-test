@@ -12,17 +12,24 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../navigations';
 import ListDataCard from '../components/molecule/ListData';
-import {uselistDataHook} from '../hooks/use-dataList.hook';
 import {dataList} from '../interface/dataList.interface';
 import {getList} from '../hooks/use-storage.hook';
 import {StarIcon} from '../assets/icon';
+import {useDataListQuery} from '../hooks/use-dataList.hook';
 
 const SearchScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const {isLoading, listData, isError, getlistData} = uselistDataHook();
+
   const [searchState, setSearchState] = useState<string>('');
   const [favorite, setFavorite] = useState<dataList[]>();
+
+  const {
+    data: listData,
+    isLoading,
+    isError,
+    refetch,
+  } = useDataListQuery({term: searchState, limit: 30});
 
   useFocusEffect(
     useCallback(() => {
@@ -35,7 +42,7 @@ const SearchScreen = () => {
   };
 
   const onSubmitSearch = () => {
-    getlistData({term: searchState, limit: 30});
+    refetch();
   };
 
   const isFavorited = (trackId: number) => {
@@ -63,7 +70,7 @@ const SearchScreen = () => {
         {!isError && !isLoading && listData ? (
           <>
             <FlatList
-              data={listData}
+              data={listData.results}
               showsVerticalScrollIndicator={false}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({item}) => (
